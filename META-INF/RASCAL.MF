@@ -1,0 +1,2 @@
+Project-Name: ple_project2
+Source: src/main/rascal

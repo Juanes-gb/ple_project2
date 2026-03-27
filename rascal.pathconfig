@@ -1,0 +1,8 @@
+{
+  "srcs": [
+    "src/main/rascal"
+  ],
+  "libs": [],
+  "bin": "target/classes"
+}
+
