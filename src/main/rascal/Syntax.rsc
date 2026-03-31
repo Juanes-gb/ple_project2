@@ -92,7 +92,7 @@ syntax Type
 ;
 
 syntax Expr
-    = equiv:   Expr "\u2261" Expr
+    = equiv:   Expr "≡" Expr
     > implies: Expr "=\>" Expr
     > or:      Expr 'or'  Expr
     > and:     Expr 'and' Expr
