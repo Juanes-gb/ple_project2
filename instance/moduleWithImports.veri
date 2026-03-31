@@ -1,0 +1,4 @@
+defmodule MyModule
+using OtherModule
+defspace S end
+end

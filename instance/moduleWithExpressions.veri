@@ -1,0 +1,5 @@
+defmodule MyModule
+defoperator * : Int -> Double -> Double end
+defvar x : Nat , y : Nat end
+defexpression (forall x in Nat . x isIn S) end
+end

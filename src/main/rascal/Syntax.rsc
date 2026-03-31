@@ -4,7 +4,6 @@ layout Layout = WhitespaceAndComment* !>> [\ \t\n\r#];
 lexical WhitespaceAndComment = [\ \t\n\r] 
                              | @category="Comment" "#" ![\n]* $;
 
-// ── Módulo ────────────────────────────────────────────────
 
 start syntax Module
     = moduleDef:
@@ -27,11 +26,11 @@ syntax ModuleItem
     | expressionItem: ExpressionDef
 ;
 
-// ── Definiciones ──────────────────────────────────────────
 
-syntax SpaceDef
+syntax SpaceDef 
     = spaceDef:
       'defspace' ID name
+      ("\<" ID parent)?
       'end'
 ;
 
@@ -39,7 +38,23 @@ syntax OperatorDef
     = operatorDef:
       'defoperator' OperatorName name
       ':' Type typ
+      Attributes? attrs
       'end'
+;
+
+syntax Attributes
+    = attributes: "[" AttributeItem+ "]"
+;
+
+syntax AttributeItem
+    = attrSimple: OperatorName name
+    | attrValued: OperatorName name ":" AttributePayload payload
+;
+
+syntax AttributePayload
+    = payloadType: Type
+    | payloadEmpty: "∅"
+    | payloadId:    ID
 ;
 
 syntax VarDef
@@ -66,8 +81,6 @@ syntax ExpressionDef
       'end'
 ;
 
-// ── Tipos ─────────────────────────────────────────────────
-
 syntax OperatorName
     = opId:     ID
     | opSymbol: OperatorLiteral
@@ -78,10 +91,6 @@ syntax Type
     > arrowType:  ID "-\>" Type
 ;
 
-// ── Expresiones (precedencia declarativa, sin "pass") ─────
-//   Rascal resuelve ambigüedad con > entre alternativas.
-//   Mayor prioridad = más abajo en la lista.
-
 syntax Expr
     = equiv:   Expr "\u2261" Expr
     > implies: Expr "=\>" Expr
@@ -89,18 +98,14 @@ syntax Expr
     > and:     Expr 'and' Expr
     > neg:     'neg' Expr
     > infix:   Expr InfixOp Expr
+    > app:     Application
     | quant:   QuantifiedExpr
-    | app:     Application
     | id:      ID
     | group:   '(' Expr ')'
 ;
 
-// ── Aplicación: (op arg1 arg2 ...) ───────────────────────
-//   Term es lo que puede aparecer como argumento (no Expr completo
-//   para evitar ambigüedad con Group y Application)
-
 syntax Application
-    = application: '(' OperatorName Arg+ ')'
+    = application: '(' OperatorName op Arg+ args ')'
 ;
 
 syntax Arg
@@ -109,8 +114,6 @@ syntax Arg
     | argQuant: QuantifiedExpr
     | argGroup: '(' Expr ')'
 ;
-
-// ── Expresión cuantificada ────────────────────────────────
 
 syntax QuantifiedExpr
     = quantExpr:
@@ -122,10 +125,9 @@ syntax Quantifier
     | exists: 'exists'
 ;
 
-// ── Operadores infix ──────────────────────────────────────
-
 syntax InfixOp
     = infixOp:  OperatorLiteral
+    | infixId:  ID
     | infixIn:  'in'
     | infixEq:  "="
     | infixLt:  "\<"
@@ -134,8 +136,6 @@ syntax InfixOp
     | infixGe:  "\>="
     | infixNe:  "\<\>"
 ;
-
-// ── Literales ─────────────────────────────────────────────
 
 syntax OperatorLiteral
     = mul: "*"
@@ -151,8 +151,6 @@ syntax OperatorLiteral
     | ne:  "\<\>"
     | eq:  "="
 ;
-
-// ── Lexicals ──────────────────────────────────────────────
 
 lexical ID = ([a-zA-Z][a-zA-Z0-9\-]* !>> [a-zA-Z0-9\-]) \ Reserved;
 
