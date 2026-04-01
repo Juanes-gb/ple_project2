@@ -59,8 +59,7 @@ syntax AttributePayload
 
 syntax VarDef
     = varDef:
-      'defvar' VarDecl first
-      (',' VarDecl)* rest
+      'defvar' {VarDecl ","}+ decls
       'end'
 ;
 
@@ -70,8 +69,8 @@ syntax VarDecl
 
 syntax RuleDef
     = ruleDef:
-      'defrule' Application lhs
-      "-\>" Application rhs
+      'defrule' Expr lhs
+      "-\>" Expr rhs
       'end'
 ;
 
@@ -98,22 +97,12 @@ syntax Expr
     > and:     Expr 'and' Expr
     > neg:     'neg' Expr
     > infix:   Expr InfixOp Expr
-    > app:     Application
+    > application: '(' OperatorName op Expr+ args ')'
     | quant:   QuantifiedExpr
-    | id:      ID
+    | identifier:      ID
     | group:   '(' Expr ')'
 ;
 
-syntax Application
-    = application: '(' OperatorName op Arg+ args ')'
-;
-
-syntax Arg
-    = argId:    ID
-    | argApp:   Application
-    | argQuant: QuantifiedExpr
-    | argGroup: '(' Expr ')'
-;
 
 syntax QuantifiedExpr
     = quantExpr:

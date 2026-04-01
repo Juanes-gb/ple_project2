@@ -1,7 +1,7 @@
 module AST
 
 data Module
-    = \module(str name, list[Import] imports, list[ModuleItem] items)
+    = moduleDef(str name, list[Import] imports, list[ModuleItem] items)
 ;
 
 data Import
@@ -18,12 +18,11 @@ data ModuleItem
 
 data SpaceDef
     = spaceDef(str name, str parent)
-    | spaceDefSimple(str name)
+    | spaceDefNoParent(str name)
 ;
 
 data OperatorDef
-    = operatorDef(OperatorName name, Type typ)
-    | operatorDefWithAttrs(OperatorName name, Type typ, list[AttributeItem] attrs)
+    = operatorDef(OperatorName name, Type typ, list[AttributeItem] attrs)
 ;
 
 data OperatorName
