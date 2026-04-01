@@ -48,7 +48,7 @@ data RuleDef
 ;
 
 data ExpressionDef
-    = expressionDef(Expr body)
+    = exprDef(Expr body)
 ;
 
 data AttributeItem
