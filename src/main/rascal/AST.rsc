@@ -21,8 +21,12 @@ data SpaceDef
     | spaceDefNoParent(str name)
 ;
 
+data Attributes
+    = attributes(list[AttributeItem] items)
+;
+
 data OperatorDef
-    = operatorDef(OperatorName name, Type typ, list[AttributeItem] attrs)
+    = operatorDef(OperatorName name, Type typ, list[Attributes] attrs)
 ;
 
 data OperatorName
@@ -62,6 +66,15 @@ data AttributePayload
     | payloadId(str name)
 ;
 
+data QuantifiedExpr
+    = quantExpr(Quantifier quantifier, str var, str domain, Expr body)
+;
+
+data Quantifier
+    = forall()
+    | exists()
+;
+
 data Expr
     = equiv(Expr lhs, Expr rhs)
     | implies(Expr lhs, Expr rhs)
@@ -70,7 +83,8 @@ data Expr
     | neg(Expr expr)
     | infix(Expr lhs, str infixOp, Expr rhs)
     | application(OperatorName appOp, list[Expr] args)
-    | quantified(str quantifier, str var, str domain, Expr body)
+    | quant(QuantifiedExpr q)
     | identifier(str name)
     | group(Expr expr)
 ;
+
