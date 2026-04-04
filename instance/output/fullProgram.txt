@@ -1,0 +1,33 @@
+Module: Set
+
+Imports:
+ - List
+
+Space: Set
+
+
+Operator: union : Set -> Set -> Set - associative
+ - id : ∅
+
+
+
+
+Operator: isIn : Element -> Set -> Bool
+
+
+Operator: implication : Bool -> Bool -> Bool
+
+
+Operator: negation : Bool -> Bool
+
+
+Variables: 
+ - p: Bool
+ - q: Bool
+
+
+Rule: (implication p q) -> (disjunction (negation p) q)
+
+
+Expression: (forall x in Element . (forall S in Set . (forall U in Set . x isIn (S union U))))
+

@@ -10,7 +10,7 @@ import Parser;
 import Implode;
 
 void main() {
-    loc f = |file:///C:/Users/Ana%20Maria/Downloads/ple_project2/instance/test1.veri|;
+    loc f = |file:///Users/juanestebangarciabonilla/ple_project2/instance/fullProgram.veri|;
     Module m = loadModule(f);
     println(generateModule(m));
 }
@@ -51,8 +51,12 @@ str generateItem(operatorItem(operatorDef(name, typ, attrs))) =
 ;
 
 str generateAttrs([]) = "";
-str generateAttrs(list[AttributeItem] attrs) = 
-    intercalate("", [ generateAttr(a) | a <- attrs ]) + "\n"
+str generateAttrs(list[Attributes] attrsList) =
+    intercalate("", [ generateSingleAttributes(a) | a <- attrsList ])
+;
+
+str generateSingleAttributes(attributes(items)) =
+    intercalate("", [ generateAttr(a) | a <- items ]) + "\n"
 ;
 
 str generateAttr(attrSimple(name)) = " - <generateOp(name)>\n";
@@ -104,6 +108,15 @@ str generateExpr(infix(e1, op, e2)) =
 str generateExpr(group(e)) = 
     "(<generateExpr(e)>)"
 ;
+
+str generateExpr(quant(q)) = generateQuantifiedExpr(q);
+
+str generateQuantifiedExpr(quantExpr(q, var, domain, body)) =
+    "(<generateQuantifier(q)> <var> in <domain> . <generateExpr(body)>)"
+;
+
+str generateQuantifier(forall()) = "forall";
+str generateQuantifier(exists()) = "exists";
 
 // definiciones necesarias extras
 
