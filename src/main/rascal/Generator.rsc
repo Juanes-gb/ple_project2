@@ -118,8 +118,6 @@ str generateQuantifiedExpr(quantExpr(q, var, domain, body)) =
 str generateQuantifier(forall()) = "forall";
 str generateQuantifier(exists()) = "exists";
 
-// definiciones necesarias extras
-
 str generateOp(opId(n)) = n;
 str generateOp(opSymbol(s)) = s;
 str generateType(simpleType(n)) = n;
