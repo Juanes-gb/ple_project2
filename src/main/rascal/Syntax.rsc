@@ -131,7 +131,7 @@ syntax OperatorLiteral
     | sub: "-"
     | add: "+"
     | pow: "**"
-//    | mod: "%"
+    | modu: "%"
     | lt:  "\<"
     | gt:  "\>"
     | le:  "\<="
