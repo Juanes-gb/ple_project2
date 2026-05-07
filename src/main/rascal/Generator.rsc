@@ -10,7 +10,7 @@ import Parser;
 import Implode;
 
 void main() {
-    loc f = |file:///Users/juanestebangarciabonilla/ple_project2/instance/fullProgram.veri|;
+    loc f = |project://ple_project2/instance/fullProgram.vl|;
     Module m = loadModule(f);
     println(generateModule(m));
 }

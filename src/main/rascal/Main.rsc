@@ -6,8 +6,8 @@ import Generator;
 import IO;
 
 void main() {
-    loc input = |file:///Users/juanestebangarciabonilla/ple_project2/instance/fullProgram.veri|;
-    loc output = |file:///Users/juanestebangarciabonilla/ple_project2/instance/output/fullProgram.txt|;
+    loc input = |project://ple_project2/instance/fullProgram.vl|;
+    loc output = |project://ple_project2/instance/output/fullProgram.txt|;
 
     Module m = loadModule(input);
     str result = generateModule(m);
