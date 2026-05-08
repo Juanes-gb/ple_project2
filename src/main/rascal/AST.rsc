@@ -17,8 +17,8 @@ data ModuleItem
 ;
 
 data SpaceDef
-    = spaceDef(str name, str parent)
-    | spaceDefNoParent(str name)
+    = spaceDef(str name, Type typ, str parent)
+    | spaceDefNoParent(str name, Type typ)
 ;
 
 data Attributes
@@ -36,7 +36,8 @@ data OperatorName
 
 data Type
     = simpleType(str name)
-    | arrowType(str from, Type to)
+    | paramType(str name, Type inner)
+    | arrowType(Type from, Type to)
 ;
 
 data VarDef
@@ -44,7 +45,7 @@ data VarDef
 ;
 
 data VarDecl
-    = varDecl(str name, str typ)
+    = varDecl(str name, Type typ)
 ;
 
 data RuleDef

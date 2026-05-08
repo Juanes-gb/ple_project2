@@ -28,8 +28,10 @@ syntax ModuleItem
 
 syntax SpaceDef 
     = spaceDef:
-      'defspace' ID name
-      ("\<" ID parent)?
+      'defspace' ID name ':' Type typ "\<" ID parent
+      'end'
+    | spaceDefNoParent:
+      'defspace' ID name ':' Type typ
       'end'
 ;
 
@@ -63,7 +65,7 @@ syntax VarDef
 ;
 
 syntax VarDecl
-    = varDecl: ID name ':' ID typ
+    = varDecl: ID name ':' Type typ
 ;
 
 syntax RuleDef
@@ -80,26 +82,27 @@ syntax ExpressionDef
 ;
 
 syntax OperatorName
-    = opId:     ID
+    = opId: ID
     | opSymbol: OperatorLiteral
 ;
 
 syntax Type
     = simpleType: ID
-    > arrowType:  ID "-\>" Type
+    | paramType: ID "\<" Type "\>"
+    > arrowType: Type "-\>" Type
 ;
 
 syntax Expr
-    = equiv:   Expr "≡" Expr
+    = equiv: Expr "≡" Expr
     > implies: Expr "=\>" Expr
-    > or:      Expr 'or'  Expr
-    > and:     Expr 'and' Expr
-    > neg:     'neg' Expr
-    > infix:   Expr InfixOp Expr
+    > or: Expr 'or'  Expr
+    > and: Expr 'and' Expr
+    > neg: 'neg' Expr
+    > infix: Expr InfixOp Expr
     > application: '(' OperatorName op Expr+ args ')'
-    | quant:   QuantifiedExpr
-    | identifier:      ID
-    | group:   '(' Expr ')'
+    | quant: QuantifiedExpr
+    | identifier: ID
+    | group: '(' Expr ')'
 ;
 
 
@@ -114,15 +117,15 @@ syntax Quantifier
 ;
 
 syntax InfixOp
-    = infixOp:  OperatorLiteral
-    | infixId:  ID
-    | infixIn:  'in'
-    | infixEq:  "="
-    | infixLt:  "\<"
-    | infixLe:  "\<="
-    | infixGt:  "\>"
-    | infixGe:  "\>="
-    | infixNe:  "\<\>"
+    = infixOp: OperatorLiteral
+    | infixId: ID
+    | infixIn: 'in'
+    | infixEq: "="
+    | infixLt: "\<"
+    | infixLe: "\<="
+    | infixGt: "\>"
+    | infixGe: "\>="
+    | infixNe: "\<\>"
 ;
 
 syntax OperatorLiteral
