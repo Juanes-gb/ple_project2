@@ -10,5 +10,5 @@ defoperator negation : Bool -> Bool end
 defoperator disjunction : Bool -> Bool -> Bool end
 defvar p : Bool, q : Bool end
 defrule (implication p q) -> (disjunction (negation p) q) end
-defexpression (forall x in Element . (forall S in Set . (forall U in Set . x isIn (S union U)))) end
+defexpression (forall x in Element . (forall S in Set . (forall U in Set . x isIn (union S U)))) end
 end
