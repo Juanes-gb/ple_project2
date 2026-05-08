@@ -38,5 +38,5 @@ Variables:
 Rule: (implication p q) -> (disjunction (negation p) q)
 
 
-Expression: (forall x in Element . (forall S in Set . (forall U in Set . x isIn (S union U))))
+Expression: (forall x in Element . (forall S in Set . (forall U in Set . x isIn (union S U))))
 
