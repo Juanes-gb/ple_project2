@@ -9,7 +9,7 @@ import Parser;
 import Implode;
 
 void main() {
-    loc f = |project://ple_project2/instance/fullProgram.vl|;
+    loc f = |project://ple_project4/instance/fullProgram.vl|;
     Module m = loadModule(f);
     println(generateModule(m));
 }

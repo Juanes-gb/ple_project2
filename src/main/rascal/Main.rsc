@@ -8,8 +8,8 @@ import IO;
 import List;
 
 void main() {
-    loc input = |project://ple_project2/instance/fullProgram.vl|;
-    loc output = |project://ple_project2/instance/output/fullProgram.txt|;
+    loc input = |project://ple_project4/instance/fullProgram.vl|;
+    loc output = |project://ple_project4/instance/output/fullProgram.txt|;
 
     Module m = loadModule(input);
     list[str] errors = checkModule(m);

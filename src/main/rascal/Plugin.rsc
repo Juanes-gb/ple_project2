@@ -8,7 +8,7 @@ import util::LanguageServer;
 
 import Syntax;
 
-PathConfig pcfg = pathConfig(srcs=[|project://ple_project2/src/main/rascal|]);
+PathConfig pcfg = pathConfig(srcs=[|project://ple_project4/src/main/rascal|]);
 Language verilangLang = language(pcfg, "Verilang", "veri", "Plugin", "contribs");
 
 set[LanguageService] contribs() = {

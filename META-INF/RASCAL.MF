@@ -1,2 +1,2 @@
-Project-Name: ple_project2
+Project-Name: ple_project4
 Source: src/main/rascal
