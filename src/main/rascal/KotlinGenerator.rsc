@@ -14,6 +14,17 @@ void main() {
     loc input = |project://ple_project4/instance/fullProgram.vl|;
     loc output = |project://ple_project4/instance/kotlin/FullProgram.kt|;
 
+    generateKotlinFromFile(input, output);
+}
+
+void testInvalid() {
+    loc input = |project://ple_project4/instance/invalidProgram.vl|;
+    loc output = |project://ple_project4/instance/kotlin/InvalidProgram.kt|;
+
+    generateKotlinFromFile(input, output);
+}
+
+void generateKotlinFromFile(loc input, loc output) {
     Module m = loadModule(input);
     list[str] errors = checkModule(m);
 
