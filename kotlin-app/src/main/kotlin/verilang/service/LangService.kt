@@ -13,33 +13,27 @@ class LangService {
 
     private val projectRoot: File by lazy {
         val cwd = File(System.getProperty("user.dir"))
-        val candidate = cwd.resolve("../rascal-shell-stable.jar")
-        if (candidate.exists()) cwd.resolve("..").canonicalFile
-        else {
-            val alt = cwd.parentFile
-            if (alt?.resolve("rascal-shell-stable.jar")?.exists() == true) alt
-            else cwd.resolve("..").canonicalFile
-        }
+        // sube desde kotlin-app/ hasta ple_project4/
+        cwd.resolve("..").canonicalFile
     }
 
     private val rascalJar: File get() = projectRoot.resolve("rascal-shell-stable.jar")
-    private val srcDir: File get() = projectRoot.resolve("src")
+    private val srcDir: File get() = projectRoot.resolve("src/main/rascal")
 
     suspend fun run(filePath: String): RunResult = withContext(Dispatchers.IO) {
         try {
-            println("[LangService] Ejecutando Rascal...")
-            println("[LangService] archivo : $filePath")
-            println("[LangService] jar     : ${rascalJar.absolutePath}")
-            println("[LangService] src     : ${srcDir.absolutePath}")
+            println("[LangService] projectRoot: ${projectRoot.absolutePath}")
+            println("[LangService] rascalJar  : ${rascalJar.absolutePath}")
+            println("[LangService] srcDir     : ${srcDir.absolutePath}")
+            println("[LangService] archivo    : $filePath")
 
             val t0 = System.currentTimeMillis()
             val output = executeRascal(filePath)
-            println("[LangService] tiempo  : ${System.currentTimeMillis() - t0} ms")
-            println("[LangService] stdout  : ${output.length} chars")
+            println("[LangService] tiempo     : ${System.currentTimeMillis() - t0} ms")
 
             val jsonStr = extractJson(output)
             if (jsonStr == null) {
-                println("[LangService] ERROR: no se encontró JSON en la salida de Rascal")
+                println("[LangService] ERROR: no JSON en salida")
                 return@withContext RunResult(error = "Rascal no produjo JSON válido:\n$output")
             }
 
@@ -55,7 +49,7 @@ class LangService {
         if (!rascalJar.exists())
             throw RuntimeException("No se encontró rascal-shell-stable.jar en ${rascalJar.absolutePath}")
         if (!srcDir.exists())
-            throw RuntimeException("No se encontró el directorio src/ en ${srcDir.absolutePath}")
+            throw RuntimeException("No se encontró src/main/rascal en ${srcDir.absolutePath}")
 
         val cmd = listOf(
             "java",
@@ -66,8 +60,10 @@ class LangService {
             filePath
         )
 
+        println("[LangService] cmd: ${cmd.joinToString(" ")}")
+
         val process = ProcessBuilder(cmd)
-            .directory(srcDir)
+            .directory(projectRoot)
             .redirectErrorStream(false)
             .start()
         process.outputStream.close()
@@ -80,18 +76,17 @@ class LangService {
         val finished = process.waitFor(180, TimeUnit.SECONDS)
         if (!finished) {
             process.destroyForcibly()
-            throw RuntimeException("Rascal tardó más de 180s y fue detenido")
+            throw RuntimeException("Rascal tardó más de 180s")
         }
 
         val stdout = stdoutFuture.get()
         val stderr = stderrFuture.get()
 
-        println("--- STDERR (${stderr.length} chars) ---")
-        if (stderr.isNotBlank()) println(stderr)
-        println("--- exit code: ${process.exitValue()} ---")
+        println("--- STDERR ---\n$stderr")
+        println("--- exit: ${process.exitValue()} ---")
 
         if (process.exitValue() != 0 && stdout.isBlank())
-            throw RuntimeException("Error de Rascal (exit ${process.exitValue()}):\n$stderr")
+            throw RuntimeException("Error Rascal (exit ${process.exitValue()}):\n$stderr")
 
         return stdout
     }
@@ -108,9 +103,9 @@ class LangService {
             var depth = 0; var inStr = false; var esc = false; var end = -1
             for (i in brace until clean.length) {
                 val c = clean[i]
-                if (esc)               { esc = false; continue }
-                if (c == '\\' && inStr){ esc = true;  continue }
-                if (c == '"')          { inStr = !inStr; continue }
+                if (esc)                { esc = false; continue }
+                if (c == '\\' && inStr) { esc = true;  continue }
+                if (c == '"')           { inStr = !inStr; continue }
                 if (!inStr) {
                     if (c == '{') depth++
                     else if (c == '}') { depth--; if (depth == 0) { end = i; break } }
